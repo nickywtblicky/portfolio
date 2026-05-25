@@ -3,9 +3,827 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio</title>
+  <title>Rafa &amp; Nicky — Creative Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #fafaf8;
+      --fg:         #111111;
+      --gray:       #999999;
+      --light:      #e8e8e4;
+      --serif:      'Playfair Display', Georgia, serif;
+      --sans:       'Inter', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 52px;
+      transition: background 0.4s ease, padding 0.4s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(250, 250, 248, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 18px 52px;
+      border-bottom: 1px solid var(--light);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      color: var(--fg);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg);
+      opacity: 0.55;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover { opacity: 1; }
+
+    /* ─── HERO ────────────────────────────────────────── */
+
+    .hero {
+      height: 100vh;
+      min-height: 600px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 52px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(52px, 8vw, 110px);
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.025em;
+      margin-bottom: 40px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gray);
+    }
+
+    .hero-desc {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--gray);
+      max-width: 320px;
+    }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-right img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(15%);
+      transition: transform 8s ease;
+    }
+
+    .hero-right:hover img { transform: scale(1.04); }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 80px;
+      left: 52px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray);
+      z-index: 2;
+    }
+
+    .hero-scroll-hint::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--gray);
+    }
+
+    /* ─── WORK ────────────────────────────────────────── */
+
+    #work {
+      padding: 128px 52px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 28px;
+      border-top: 1px solid var(--light);
+      margin-bottom: 64px;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: 30px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .section-tag {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+
+    .work-item { cursor: pointer; }
+
+    /* asymmetric layout */
+    .work-item:nth-child(1) { grid-column: span 7; }
+    .work-item:nth-child(2) { grid-column: span 5; }
+    .work-item:nth-child(3) { grid-column: span 4; }
+    .work-item:nth-child(4) { grid-column: span 4; }
+    .work-item:nth-child(5) { grid-column: span 4; }
+    .work-item:nth-child(6) { grid-column: span 8; }
+    .work-item:nth-child(7) { grid-column: span 4; }
+
+    .work-thumb {
+      position: relative;
+      overflow: hidden;
+      background: var(--light);
+    }
+
+    .work-item:nth-child(1) .work-thumb { aspect-ratio: 4/3; }
+    .work-item:nth-child(2) .work-thumb { aspect-ratio: 3/4; }
+    .work-item:nth-child(3) .work-thumb { aspect-ratio: 1/1; }
+    .work-item:nth-child(4) .work-thumb { aspect-ratio: 1/1; }
+    .work-item:nth-child(5) .work-thumb { aspect-ratio: 1/1; }
+    .work-item:nth-child(6) .work-thumb { aspect-ratio: 16/9; }
+    .work-item:nth-child(7) .work-thumb { aspect-ratio: 3/4; }
+
+    .work-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(25%);
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  filter 0.5s ease;
+    }
+
+    .work-item:hover .work-thumb img {
+      transform: scale(1.05);
+      filter: grayscale(0%);
+    }
+
+    .work-hover {
+      position: absolute;
+      inset: 0;
+      background: rgba(250, 250, 248, 0.86);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .work-item:hover .work-hover { opacity: 1; }
+
+    .work-hover-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .work-hover-cat {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .work-meta {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .work-label {
+      font-size: 13px;
+      letter-spacing: 0.01em;
+    }
+
+    .work-year {
+      font-size: 11px;
+      color: var(--gray);
+    }
+
+    /* ─── MARQUEE ─────────────────────────────────────── */
+
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      padding: 22px 0;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      white-space: nowrap;
+      animation: marquee 22s linear infinite;
+    }
+
+    .marquee-track:hover { animation-play-state: paused; }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 32px;
+      padding-right: 32px;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 22px;
+      color: var(--gray);
+      letter-spacing: 0.01em;
+    }
+
+    .marquee-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--light);
+      flex-shrink: 0;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── ABOUT ───────────────────────────────────────── */
+
+    #about {
+      padding: 128px 52px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-photo {
+      position: relative;
+    }
+
+    .about-photo img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(15%);
+    }
+
+    .about-photo-caption {
+      margin-top: 14px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .about-content {
+      padding-top: 8px;
+    }
+
+    .about-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 36px;
+    }
+
+    .about-heading {
+      font-family: var(--serif);
+      font-size: clamp(30px, 4vw, 50px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 36px;
+    }
+
+    .about-heading em {
+      font-style: italic;
+      color: var(--gray);
+    }
+
+    .about-body {
+      font-size: 15px;
+      line-height: 1.85;
+      color: #555;
+      margin-bottom: 56px;
+    }
+
+    .about-body p + p { margin-top: 22px; }
+
+    .services-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 18px;
+    }
+
+    .services-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .service-pill {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid var(--light);
+      padding: 8px 16px;
+      color: var(--gray);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .service-pill:hover {
+      border-color: var(--fg);
+      color: var(--fg);
+    }
+
+    /* ─── CONTACT ─────────────────────────────────────── */
+
+    #contact {
+      padding: 128px 52px 96px;
+      border-top: 1px solid var(--light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .contact-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 36px;
+    }
+
+    .contact-heading {
+      font-family: var(--serif);
+      font-size: clamp(44px, 8vw, 96px);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 56px;
+    }
+
+    .contact-heading em {
+      font-style: italic;
+      color: var(--gray);
+    }
+
+    .contact-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      color: var(--fg);
+      border-bottom: 1px solid var(--fg);
+      padding-bottom: 3px;
+      transition: opacity 0.2s;
+    }
+
+    .contact-cta:hover { opacity: 0.4; }
+
+    .contact-cta::after {
+      content: '↗';
+      font-size: 12px;
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+
+    footer {
+      padding: 32px 52px;
+      border-top: 1px solid var(--light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--gray);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--gray);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--fg); }
+
+    /* ─── REVEAL ANIMATIONS ───────────────────────────── */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+
+    @media (max-width: 1024px) {
+      nav, nav.scrolled { padding-left: 32px; padding-right: 32px; }
+      .hero-left { padding: 0 32px 64px; }
+      .hero-scroll-hint { left: 32px; bottom: 64px; }
+      #work, #about, #contact { padding-left: 32px; padding-right: 32px; }
+      footer { padding-left: 32px; padding-right: 32px; }
+      .about-grid { gap: 48px; }
+    }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        opacity: 0.12;
+      }
+      .hero-left {
+        padding: 0 28px 64px;
+        z-index: 2;
+        justify-content: flex-end;
+        min-height: 100vh;
+      }
+      .hero-scroll-hint { display: none; }
+
+      .work-grid { grid-template-columns: 1fr 1fr; }
+      .work-item:nth-child(n) { grid-column: span 1; }
+      .work-item:nth-child(1) { grid-column: span 2; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .about-photo img { aspect-ratio: 4/3; }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .nav-links { display: none; }
+
+      .hero-left { padding: 0 24px 56px; }
+
+      #work, #about, #contact { padding: 80px 24px; }
+
+      .work-grid { grid-template-columns: 1fr; }
+      .work-item:nth-child(n) { grid-column: span 1; }
+
+      footer {
+        padding: 24px;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+      .footer-links { gap: 20px; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello from my portfolio</h1>
+
+  <!-- ── NAV ──────────────────────────────────────────── -->
+  <nav id="nav">
+    <a class="nav-logo" href="#">Rafa &amp; Nicky</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ─────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Creative Studio — Est. 2024</p>
+      <h1 class="hero-title">Rafa<br>&amp; <em>Nicky</em></h1>
+      <p class="hero-desc">Design, direction &amp; visual storytelling. We create work that moves people.</p>
+    </div>
+    <div class="hero-right">
+      <img
+        src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=1400&auto=format&fit=crop&q=70"
+        alt="Studio work"
+      >
+    </div>
+    <span class="hero-scroll-hint" aria-hidden="true">Scroll</span>
+  </section>
+
+  <!-- ── MARQUEE ───────────────────────────────────────── -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <!-- duplicated for seamless loop -->
+      <span class="marquee-item">Brand Identity <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Art Direction <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Web Design <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Packaging <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Typography <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Motion <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Editorial <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Brand Identity <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Art Direction <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Web Design <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Packaging <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Typography <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Motion <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Editorial <span class="marquee-dot"></span></span>
+    </div>
+  </div>
+
+  <!-- ── WORK ─────────────────────────────────────────── -->
+  <section id="work">
+    <div class="section-header reveal">
+      <h2 class="section-title">Selected Work</h2>
+      <span class="section-tag">07 Projects</span>
+    </div>
+
+    <div class="work-grid">
+
+      <div class="work-item reveal reveal-delay-1">
+        <div class="work-thumb">
+          <img src="https://images.unsplash.com/photo-1534126511673-b6899657816a?w=1200&auto=format&fit=crop&q=70" alt="Atelier — Brand Identity">
+          <div class="work-hover">
+            <span class="work-hover-title">Atelier</span>
+            <span class="work-hover-cat">Brand Identity</span>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-label">Atelier — Brand Identity</span>
+          <span class="work-year">2025</span>
+        </div>
+      </div>
+
+      <div class="work-item reveal reveal-delay-2">
+        <div class="work-thumb">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&auto=format&fit=crop&q=70" alt="Lumière — Campaign">
+          <div class="work-hover">
+            <span class="work-hover-title">Lumière</span>
+            <span class="work-hover-cat">Campaign</span>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-label">Lumière — Campaign</span>
+          <span class="work-year">2025</span>
+        </div>
+      </div>
+
+      <div class="work-item reveal reveal-delay-1">
+        <div class="work-thumb">
+          <img src="https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?w=800&auto=format&fit=crop&q=70" alt="Maison — Art Direction">
+          <div class="work-hover">
+            <span class="work-hover-title">Maison</span>
+            <span class="work-hover-cat">Art Direction</span>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-label">Maison — Art Direction</span>
+          <span class="work-year">2024</span>
+        </div>
+      </div>
+
+      <div class="work-item reveal reveal-delay-2">
+        <div class="work-thumb">
+          <img src="https://images.unsplash.com/photo-1616469829581-73993eb86b02?w=800&auto=format&fit=crop&q=70" alt="Forma — Digital">
+          <div class="work-hover">
+            <span class="work-hover-title">Forma</span>
+            <span class="work-hover-cat">Digital Experience</span>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-label">Forma — Digital</span>
+          <span class="work-year">2024</span>
+        </div>
+      </div>
+
+      <div class="work-item reveal reveal-delay-3">
+        <div class="work-thumb">
+          <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&auto=format&fit=crop&q=70" alt="Glyph — Print">
+          <div class="work-hover">
+            <span class="work-hover-title">Glyph</span>
+            <span class="work-hover-cat">Print</span>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-label">Glyph — Print</span>
+          <span class="work-year">2024</span>
+        </div>
+      </div>
+
+      <div class="work-item reveal reveal-delay-1">
+        <div class="work-thumb">
+          <img src="https://images.unsplash.com/photo-1449247709967-d4461a6a6103?w=1200&auto=format&fit=crop&q=70" alt="Origine — Packaging">
+          <div class="work-hover">
+            <span class="work-hover-title">Origine</span>
+            <span class="work-hover-cat">Packaging</span>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-label">Origine — Packaging</span>
+          <span class="work-year">2024</span>
+        </div>
+      </div>
+
+      <div class="work-item reveal reveal-delay-2">
+        <div class="work-thumb">
+          <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=700&auto=format&fit=crop&q=70" alt="Flux — Motion">
+          <div class="work-hover">
+            <span class="work-hover-title">Flux</span>
+            <span class="work-hover-cat">Motion</span>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-label">Flux — Motion</span>
+          <span class="work-year">2023</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── ABOUT ─────────────────────────────────────────── -->
+  <section id="about">
+    <div class="about-grid">
+
+      <div class="about-photo reveal">
+        <img
+          src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&auto=format&fit=crop&q=70"
+          alt="Rafa & Nicky"
+        >
+        <p class="about-photo-caption">Rafa &amp; Nicky — 2024</p>
+      </div>
+
+      <div class="about-content">
+        <p class="about-eyebrow reveal">About</p>
+        <h2 class="about-heading reveal reveal-delay-1">We make things that <em>feel right</em></h2>
+        <div class="about-body reveal reveal-delay-2">
+          <p>We're a creative duo working at the intersection of brand identity, art direction, and digital experience. Based between studios and screens, we collaborate with brands that care about how things look, feel, and communicate.</p>
+          <p>Our process is built around curiosity — asking why before how, and letting the concept drive the craft. Every project is a new problem worth solving beautifully.</p>
+        </div>
+        <p class="services-label reveal reveal-delay-3">Services</p>
+        <div class="services-list reveal reveal-delay-4">
+          <span class="service-pill">Brand Identity</span>
+          <span class="service-pill">Art Direction</span>
+          <span class="service-pill">Typography</span>
+          <span class="service-pill">Web Design</span>
+          <span class="service-pill">Packaging</span>
+          <span class="service-pill">Motion</span>
+          <span class="service-pill">Editorial</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CONTACT ───────────────────────────────────────── -->
+  <section id="contact">
+    <p class="contact-eyebrow reveal">Get in touch</p>
+    <h2 class="contact-heading reveal reveal-delay-1">
+      Let's <em>work</em><br>together
+    </h2>
+    <a class="contact-cta reveal reveal-delay-2" href="mailto:nicolasvarone123@gmail.com">
+      nicolasvarone123@gmail.com
+    </a>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-copy">&copy; 2025 Rafa &amp; Nicky. All rights reserved.</span>
+    <ul class="footer-links">
+      <li><a href="#" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="#" target="_blank" rel="noopener">Behance</a></li>
+      <li><a href="#" target="_blank" rel="noopener">LinkedIn</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // nav: add .scrolled class on scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // reveal on scroll via IntersectionObserver
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+
 </body>
 </html>
